@@ -3,8 +3,7 @@ import telebot
 from telebot import types
 
 covid19 = COVID19Py.COVID19()
-bot = telebot.TeleBot('')
-
+bot = telebot.TeleBot('5758942153:AAHhdUUg8BTHXodrZi_75Z2W1tk4CPVEuBI')
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -23,11 +22,11 @@ def mess(message):
     final_message = ""
     get_message_bot = message.text.strip().lower()
     if get_message_bot == 'сша':
-        location = covid19.getLocationByCountryCode('US')
+        location = covid19.getLocationByCountryCode('US', timelines=True)
     elif get_message_bot == 'россия':
-        location = covid19.getLocationByCountryCode('RU')
+        location = covid19.getLocationByCountryCode('RU', timelines=True)
     elif get_message_bot == 'украина':
-        location = covid19.getLocationByCountryCode('UA')
+        location = covid19.getLocationByCountryCode('UA', timelines=True)
     else:
         location = covid19.getLatest()
         final_message = f"<u>Данные по всему миру:</u>\nЗаболевные: {location['confirmed']:}"
@@ -35,10 +34,13 @@ def mess(message):
     if final_message == "":
         date = location[0]['last_updated'].split('T')
         time = date[1].split('.')
+        location_timesline = location[0]['timelines']['confirmed']['timeline']
+        location_sorted = sorted(location_timesline.values())[-2]
+        full_day = location[0]['latest']['confirmed'] - location_sorted
+
         final_message = f"<u>Данные по стране {get_message_bot.title()}</u>\nНаселение: {location[0]['country_population']:}\n" \
-                        f"Обновление: {date[0]} {time[0]}\n" \
-                        f"Заболевшие: {location[0]['latest']['confirmed']:}\n" \
-                        f"Смертей: {location[0]['latest']['deaths']:}"
+                        f"<b>Заболевшие</b>\n    Всего: {location[0]['latest']['confirmed']:}\n    За день: {full_day} \n" \
+                        f"Смертей: {location[0]['latest']['deaths']:}" \
 
     bot.send_message(message.chat.id, final_message, parse_mode='html')
 
