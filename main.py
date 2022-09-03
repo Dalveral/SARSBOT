@@ -3,7 +3,9 @@ import telebot
 from telebot import types
 
 covid19 = COVID19Py.COVID19()
+# Your telegram bot token
 bot = telebot.TeleBot('')
+
 
 @bot.message_handler(commands=['start'])
 def start(message):
