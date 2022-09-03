@@ -3,7 +3,7 @@ import telebot
 from telebot import types
 
 covid19 = COVID19Py.COVID19()
-bot = telebot.TeleBot('5758942153:AAHhdUUg8BTHXodrZi_75Z2W1tk4CPVEuBI')
+bot = telebot.TeleBot('')
 
 @bot.message_handler(commands=['start'])
 def start(message):
